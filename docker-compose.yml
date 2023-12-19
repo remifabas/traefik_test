@@ -10,26 +10,28 @@ services:
       - --providers.docker
       - --providers.docker.exposedByDefault=false # Exclude all containers (they will be enabled with label "traefik.enable=true")
 
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
+      # - --entrypoints.web.address=:80
+      # - --entrypoints.websecure.address=:443
+      - --entryPoints.http.address=:80
+      - --entryPoints.https.address=:443
 
-      # Enable ACME (Let's Encrypt): automatic SSL.
+      # Enable ACME (Automatic Certificate Management Environment) (Here: Let's Encrypt): automatic SSL.
 
       # Email address used for registration.
       # Required
-      - --certificatesresolvers.myresolver.acme.email=redrem@gmail.com
+      #- --certificatesresolvers.myresolver.acme.email=redrem@gmail.com
 
       # File or key used for certificates storage.
       # Required
-      - --certificatesresolvers.myresolver.acme.storage=acme.json
+      #- --certificatesresolvers.myresolver.acme.storage=acme.json
 
       # EntryPoint to use for the HTTP-01 challenges.
       # Required
-      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http
+      #- --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http
 
       # DNS provider used.
       # Required
-      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=digitalocean
+      # - --certificatesresolvers.myresolver.acme.dnschallenge.provider=8.8.8.8:53
 
     ports:
       # The HTTP port
@@ -62,7 +64,7 @@ services:
       - "traefik.http.routers.echo.rule=Host(`echo.localhost`)"
       - "traefik.http.services.echo-service.loadbalancer.server.port=80"
       - "traefik.http.services.echo-service.loadbalancer.healthcheck.path=status"
-      - "traefik.http.services.echo-service.loadbalancer.healthcheck.interval=15"
+      - "traefik.http.services.echo-service.loadbalancer.healthcheck.interval=15s"
       # - traefik.http.routers.echo.tls=true
       # - traefik.http.routers.echo.tls.certresolver=myresolver
     deploy:
